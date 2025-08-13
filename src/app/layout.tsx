@@ -11,16 +11,12 @@ export const metadata: Metadata = {
   description: 'Recargas digitales al instante',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es">
-      <body className={inter.className}>
+      <body className={`${inter.className} bg-background text-white`}>
         <Header />
-        <main className="max-w-6xl mx-auto px-4 py-8">{children}</main>
+        <main className="max-w-6xl mx-auto px-4 pt-20 py-8">{children}</main>
         <Footer />
       </body>
     </html>

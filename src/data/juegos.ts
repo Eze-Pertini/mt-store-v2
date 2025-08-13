@@ -22,19 +22,23 @@ export type Juego = {
   nombre: string;
   imagen: string;
   activo: boolean;
+  instrucciones?: string;
   camposPrePago: Campo[];
   requierePostPago: boolean;
   camposPostPago?: Campo[];
   denominaciones: Denominacion[];
 };
 
+export const TRANSFER_DISCOUNT = 0.15; // 15%
+
 export const juegos: Juego[] = [
   {
     id: 'free-fire',
     slug: 'free-fire',
     nombre: 'Free Fire',
-    imagen: '/img/free-fire.jpg',
+    imagen: '/img/free-fire-logo.webp',
     activo: true,
+    instrucciones: 'Solo necesitas tu Free Fire User ID. Entrega inmediata.',
     camposPrePago: [
       { name: 'playerId', label: 'ID del jugador', type: 'text', required: true },
     ],
@@ -48,8 +52,10 @@ export const juegos: Juego[] = [
     id: 'roblox',
     slug: 'roblox',
     nombre: 'Roblox',
-    imagen: '/img/roblox.jpg',
+    imagen: '/img/roblox-logo.webp',
     activo: true,
+    instrucciones:
+      'Tras pagar te pediremos la contraseña y posiblemente un código de verificación. Proceso guiado por WhatsApp.',
     camposPrePago: [
       { name: 'username', label: 'Usuario Roblox', type: 'text', required: true },
     ],
