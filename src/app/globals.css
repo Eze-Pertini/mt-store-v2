@@ -1,26 +1,35 @@
+/* Tailwind v4 */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Paleta modo oscuro – tokens */
+@theme {
+  --color-brand: #00AEEF;
+  --color-brand-dark: #008CBF;
+  --color-brand-light: #33CFFF;
+
+  --color-background: #0D1117;
+  --color-surface: #1B1F24;
+  --color-muted: #A1A1AA;
+
+  --color-accent: #7B61FF;
+  --color-success: #00C48C;
+  --color-warning: #F9A825;
+  --color-danger:  #E53935;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* Forzamos esquema oscuro del navegador */
+:root { color-scheme: dark; }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
+/* Base global */
+html, body {
+  @apply bg-background text-white;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Utilidades de tus cards e imágenes para que NO se gigantesquen */
+.card {
+  @apply bg-surface rounded-lg shadow;
+}
+.card-img {
+  @apply w-full h-48 object-cover;
 }
