@@ -1,20 +1,14 @@
-import { ordenes } from '@/data/ordenes';
-import { notFound } from 'next/navigation';
+import OrdenLive from './OrdenLive';
 
-type Props = {
-  params: { id: string };
-};
-
-export default function OrdenPage({ params }: Props) {
-  const orden = ordenes.find((o) => o.id === params.id);
-  if (!orden) return notFound();
+export default async function OrdenPage({
+  params,
+}: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   return (
-    <div className="max-w-2xl mx-auto py-8 text-center">
-      <h1 className="text-2xl font-bold mb-4">¡Orden creada!</h1>
-      <p className="mb-2">ID de orden: {orden.id}</p>
-      <p className="mb-6">Estado: {orden.estado}</p>
-      <p>En breve recibirás un email con los pasos para continuar el pago.</p>
-    </div>
+    <main className="max-w-xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-4">Estado de tu orden</h1>
+      <OrdenLive id={id} />
+    </main>
   );
 }
