@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Juego {
+  id               String          @id @default(cuid())
+  slug             String          @unique
+  nombre           String
+  imagen           String
+  activo           Boolean         @default(true)
+  instrucciones    String?
+  camposPrePago    Json            // [{ name, label, type, required }]
+  requierePostPago Boolean         @default(false)
+  camposPostPago   Json?
+  denominaciones   Denominacion[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+  ordenes   Orden[] // opcional, lado inverso
+}
+
+model Denominacion {
+  id         String    @id @default(cuid())
+  juegoId    String
+  juego      Juego     @relation(fields: [juegoId], references: [id], onDelete: Cascade)
+  etiqueta   String
+  valor      Int
+  activo     Boolean   @default(true)
+  precios    Precio[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  ordenes   Orden[] // opcional, lado inverso
+}
+
+model Precio {
+  id              String   @id @default(cuid())
+  denominacionId  String
+  denominacion    Denominacion @relation(fields: [denominacionId], references: [id], onDelete: Cascade)
+  pais            String   @default("AR")  // “AR”, “CL”, “ES”...
+  moneda          String   @default("ARS") // “ARS”, “CLP”, “EUR”
+
+  // Guardamos en CENTAVOS para evitar decimales
+  precioFinalCents Int
+
+  activo          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([denominacionId, pais])
+}
+
+// 👇 Nuevo enum
+enum EstadoOrden {
+  CREADA
+  PAGADA
+  EN_PROCESO
+  ENTREGADA
+  CANCELADA
+}
+
+
+model Orden {
+  id              String   @id @default(cuid())
+  pais            String   @default("AR")
+  juegoId         String
+  denominacionId  String
+  email           String
+  whatsapp        String
+  camposPrePago   Json?
+  camposPostPago  Json?
+  estado          String   @default("CREADA")
+  mpPreferenceId  String?
+  mpPaymentId     String?
+  ip              String?
+  userAgent       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // 👇 relaciones
+  juego          Juego        @relation(fields: [juegoId], references: [id])
+  denominacion   Denominacion @relation(fields: [denominacionId], references: [id])
+}
+
